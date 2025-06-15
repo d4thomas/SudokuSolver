@@ -5,12 +5,12 @@ import java.util.Map;
 
 /**
  *
- * @param <X> the data type of variables
+ * @param <X> the data type of variables.
  *            * (e.g., for Sudoku, we use Square such as (4, 7) to name
  *            squares of the 9x9 board, where 4 is the row number and
- *            7 is the column number.)
+ *            7 is the column number)
  * @param <V> the data type of variable values.
- *            * (e.g., for Sudoku, a value is an integer between 1 and 9.)
+ *            * (e.g., for Sudoku, a value is an integer between 1 and 9)
  */
 public interface CSPProblem<X, V> {
 
@@ -31,13 +31,8 @@ public interface CSPProblem<X, V> {
     List<X> getPreAssignedVariables();
 
     /**
-     * @return the size of the default (i.e., largest possible) domain.
-     */
-    int getDomainSize();
-
-    /**
      * Print the puzzle based on the passed map of all variables.
      */
-    String printPuzzle(Map<X, List<V>> allVariables);
+    void printPuzzle(Map<X, List<V>> allVariables);
 
 }

@@ -15,11 +15,11 @@ public class MAC_Sudoku extends MAC<Square, Integer> {
 
     /**
      * Implements the `revise()` operation for arc consistency checking in Sudoku.
-     *
+     * <p>
      * This method enforces consistency between two variables (`tail` and `head`)
      * connected by a constraint. It removes values from `tail`'s domain that are
      * inconsistent with all values in `head`'s domain.
-     *
+     * <p>
      * In the context of Sudoku, two squares (i.e., variables) must take different
      * values. Therefore, a value `v` in the domain of `tail` is inconsistent if
      * `head`'s domain contains **only** the same value `v`.
@@ -55,7 +55,10 @@ public class MAC_Sudoku extends MAC<Square, Integer> {
     }
 
     /**
-     * @param args
+     * The main method serves as the entry point for the Sudoku solver application.
+     *
+     * @param args Command-line arguments supplied to the application. In this method,
+     *             the arguments are unused.
      */
     public static void main(String[] args) {
         String filename = "./SudokuPuzzles/Puzzle10.txt";

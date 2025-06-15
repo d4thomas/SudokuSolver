@@ -49,23 +49,22 @@ public class Sudoku implements CSPProblem<Square, Integer> {
 
     /**
      * Adds all pairwise neighbor relationships within a given set of squares.
-     *
+     * <p>
      * For each square in the set, all other squares in the same set are added
      * to its list of neighbors. A square is not considered its own neighbor,
      * so self-pairs are excluded.
-     *
-     * If a square does not already have an entry in the neighbors map, a new
+     * <p>
+     * If a square does not already have an entry in the neighbor map, a new
      * set is created and added.
      *
      * @param group a set of squares that all share a constraint (for example,
-     *              same row, column, or box)
+     *               the same row, column, or box)
      */
-    @SuppressWarnings("unused")
     private void addPairwiseNeighbors(Set<Square> group) {
         for (Square s1 : group) {
             for (Square s2 : group) {
                 if (!s1.equals(s2)) {
-                    neighbors.computeIfAbsent(s1, k -> new HashSet<>()).add(s2);
+                    neighbors.computeIfAbsent(s1, _ -> new HashSet<>()).add(s2);
                 }
             }
         }
@@ -86,16 +85,16 @@ public class Sudoku implements CSPProblem<Square, Integer> {
                             int number = Integer.parseInt(numbers[j]);
                             List<Integer> domain;
                             if (number > 0 && number < 10) {
-                                // this square is pre-assigned
+                                // This square is pre-assigned
                                 domain = new ArrayList<>(List.of(number));
                             } else {
-                                // this square is open
+                                // This square is open
                                 domain = new ArrayList<>(defaultDomain);
                             }
                             allVariables.put(vName, domain);
                         }
                     } else {
-                        // If a line is empty, or if the remaining lines are missing
+                        // If a line is empty, or if the remaining lines are missing,
                         // treat an empty or missing line as all squares in that
                         // line are open
                         for (int j = 0; j < 9; j++) {
@@ -106,41 +105,43 @@ public class Sudoku implements CSPProblem<Square, Integer> {
                     }
                 }
             } catch (NumberFormatException e) {
+                //noinspection CallToPrintStackTrace
                 e.printStackTrace();
             }
         } catch (IOException ioe) {
+            //noinspection CallToPrintStackTrace
             ioe.printStackTrace();
         }
         return allVariables;
     }
 
     /**
-     * Prints out the solution, and returns the solution as a String.
-     * 
-     * @param allVariables
-     * @return the solution as a string
+     * Prints the current state of the Sudoku puzzle to the console.
+     *
+     * @param allVariables a map representing the Sudoku grid.
      */
-    public String printPuzzle(Map<Square, List<Integer>> allVariables) {
-        String solution = "";
+    public void printPuzzle(Map<Square, List<Integer>> allVariables) {
+        @SuppressWarnings("MismatchedQueryAndUpdateOfStringBuilder")
+        StringBuilder solution = new StringBuilder();
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if (allVariables.get(new Square(i, j)).size() > 1) {
                     System.out.print("[ ]");
-                    solution += "[ ]";
+                    solution.append("[ ]");
                 } else {
                     System.out.print(
-                            "[" + allVariables.get(new Square(i, j)).get(0) + "]");
-                    solution += "[" + allVariables.get(new Square(i, j)).get(0) + "]";
+                            "[" + allVariables.get(new Square(i, j)).getFirst() + "]");
+                    solution.append("[").append(allVariables.get(new Square(i, j)).getFirst()).append("]");
                 }
             }
             System.out.print("\r\n");
-            solution += "\r\n";
+            solution.append("\r\n");
         }
-        return solution;
     }
 
     /**
      * Given a square, return all its neighbors as a list.
+     * <p>
      * "Neighbors" are those squares in the same row, column, or 3x3 box
      * 
      * @param sq the square
@@ -165,7 +166,4 @@ public class Sudoku implements CSPProblem<Square, Integer> {
         return assigned;
     }
 
-    public int getDomainSize() {
-        return 9;
-    }
 }

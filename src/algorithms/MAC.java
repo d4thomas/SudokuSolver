@@ -6,16 +6,16 @@ import problems.CSPProblem;
 
 /**
  * A generic solver for CSPs that implements the following techniques:
- * maintaining arc consistency (MAC) +
- * minimum-remaining-values (MRV)
- * Note: MAC = backtracking search + dynamic arc consistency (AC-3)
+ * maintaining arc consistency (MAC) and minimum-remaining-values (MRV)
+ * <p>
+ * Note: MAC = backtracking search and dynamic arc consistency (AC-3)
  *
  * @param <X> the data type of variables.
  *            * * (e.g., for Sudoku, we use Square such as (1, 5) to
  *            name the squares of the 9x9 board, where the first number
- *            specifies the row and the second number specifies the column.)
+ *            specifies the row and the second number specifies the column)
  * @param <V> the data type of values.
- *            (e.g., in Sudoku, values should be integers between 1 and 9.)
+ *            (e.g., in Sudoku, values should be integers between 1 and 9)
  */
 public abstract class MAC<X, V> {
 
@@ -111,7 +111,7 @@ public abstract class MAC<X, V> {
         assigned.add(n);
         while (!allVariables.get(n).isEmpty()) {
             // Select a value to be assigned to this variable
-            V value = allVariables.get(n).remove(0);
+            V value = allVariables.get(n).removeFirst();
             // Make a deep clone of the nodeList in case to back track
             // later if needed
             Map<X, List<V>> allVariablesClone = deepClone();
@@ -120,12 +120,12 @@ public abstract class MAC<X, V> {
             allVariables.get(n).add(value);
             Queue<Arc<X>> arcs = new LinkedList<>();
             // Get all the arcs that could potentially be affected by
-            // this assignment, i.e., all the arcs where n is the head.
+            // this assignment, i.e., all the arcs where n is the head
             for (X nei : problem.getNeighborsOf(n)) {
                 arcs.add(new Arc<>(nei, n));
             }
             // Perform initial constraint propagation using the AC-3
-            // algorithm before search begins.
+            // algorithm before the search begins
             if (AC3(arcs) && search()) {
                 return true;
             } else {
@@ -171,9 +171,9 @@ public abstract class MAC<X, V> {
     }
 
     /**
-     * Implements the Minimum Remaining Values (MRV) heuristic.
-     *
-     * This method is used during backtracking search to decide which unassigned
+     * Implements the minimum remaining values (MRV) heuristic.
+     * <p>
+     * This method is used during a backtracking search to decide which unassigned
      * variable to consider next. The MRV heuristic selects the variable with
      * the fewest legal values remaining in its domain, helping reduce the branching
      * factor early in the search.
